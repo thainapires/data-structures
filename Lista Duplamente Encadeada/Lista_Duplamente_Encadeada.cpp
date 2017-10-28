@@ -4,6 +4,8 @@
 
 #include <iostream>
 #include <stdlib.h>
+#include <stdio.h>
+#include<conio.h>
 
 using namespace std;
 
@@ -17,10 +19,13 @@ typedef struct no* noPtr;
 noPtr inicio = NULL;
 
 int menu();
+void apagarLista();
 void retirarnofinal();
+void retirarnocomeco();
 void retirar();
 void listar();
 void inserirnofinal();
+void inserirnocomeco();
 void consultar();
 void inserirdecres();
 bool listaVazia();
@@ -30,52 +35,82 @@ int main(){
     do {
         op = menu();
         switch (op) {
-            case 1: listar(); break;
-            case 2: consultar(); break;
-            case 3: inserirnofinal(); break;
+            case 1: inserirnocomeco(); break;
+            case 2: inserirnofinal(); break;
+            case 3: inserirdecres(); break;
             case 4: retirar(); break;
-            case 5: retirarnofinal(); break;
-            case 6: inserirdecres(); break;
+            case 5: retirarnocomeco(); break;
+            case 6: retirarnofinal(); break;
+            case 7: listar(); break;
+            case 8: consultar(); break;
+            case 9: apagarLista(); break;
         }
     } while (op != 0);
 }
 
 int menu(){
     int opcao;
-    cout << "\n1: Listar elementos" << endl;
-    cout << "2: Consultar elementos" << endl;
-    cout << "3: Inserir no final" << endl;
-    cout << "4: Retirar" << endl;
-    cout << "5: Retirar no final " << endl;
-    cout << "6: Inserir de forma Descrecente" << endl;
-    cout << "0: Sair" << endl;
-    cout << "\nDigite a opcao (0 - 6): ";
+    cout<< "* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *\n";
+    cout<< "*                  Lista duplamente encadeada                     *\n";
+    cout<< "*                                                                 *\n";
+    cout<< "*                    1: Inserir no comeco                         *\n";
+    cout<< "*                    2: Inserir no final                          *\n";
+    cout<< "*                    3: Inserir decrescente                       *\n";
+    cout<< "*                    4: Retirar elemento especifico               *\n";
+    cout<< "*                    5: Retirar no comeco                         *\n";
+    cout<< "*                    6: Retirar no final                          *\n";
+    cout<< "*                    7: Listar elementos                          *\n";
+    cout<< "*                    8: Consultar elementos                       *\n";
+    cout<< "*                    9: Apagar lista                              *\n";
+    cout<< "*                    0: Sair                                      *\n";
+    cout<< "*                                                                 *\n";
+    cout<< "* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *\n";
+    cout << "\n\t\tDigite a opcao (0 - 8): ";
     cin >> opcao;
     return opcao;
 }
 
-bool listaVazia ()
-{
+void apagarLista(){
+    system("cls");
+    noPtr aux, p = inicio;
+    while (p != NULL){
+        aux = p;
+        p = p -> prox;
+        delete aux;
+    }
+    inicio = NULL;
+    cout << "\n\t\t\t   LISTA DELETADA!\n" << endl;
+}
+
+bool listaVazia (){
     if (inicio)
-    return false;
+        return false;
     else
-    return true;
+        return true;
 }
 
 //Listar elementos
 void listar(){
     noPtr p;
     p = inicio;
-    if (!listaVazia())
-    {
-        cout << "\nOs elementos da lista sao:" << endl;
+    if (!listaVazia()){
+        system("cls");
+        cout << "\nOs elementos da lista sao:\n" << endl;
+        cout<<"Inicio->";
         while (p != NULL){
-        cout << p->info << endl;
-        p = p -> prox;
+            cout << p->info<<"->";
+            p = p -> prox;
         }
+        cout<<"NULL"<<endl;
+        fflush(stdin);
+        cout<<"\nClique em qualquer tecla para voltar ao menu";
+        getch();
+        system("cls");
     }
-    else cout << "\nLista Vazia!" << endl;
-
+    else{
+        system("cls");
+        cout << "\n\t\t\t   LISTA VAZIA!\n" << endl;
+    }
 }
 
 //Consultar elemento na lista
@@ -84,21 +119,31 @@ void consultar(){
     int x;
     bool achei = false;
     if(!listaVazia()){
-        cout <<"\n Digite o elemento que você quer encontrar: ";
+        cout <<"\n Digite o elemento que voce quer encontrar: ";
         cin>>x;
+        system("cls");
+        cout <<"\nCONSULTA DE ELEMENTO"<<endl;
         while(p!=NULL && achei == false){
             if(p->info == x){
-                cout <<"Elemento"<<p->info<<"possui endereco"<<p;
+                cout <<"\nElemento "<<p->info<<" possui endereco "<<p<<endl;
                 achei = true;
             }
             p = p->prox;
         }
+        if(achei){
+            fflush(stdin);
+            cout<<"\nClique em qualquer tecla para voltar ao menu";
+            getch();
+            system("cls");
+        }
+
         if(!achei){
-        cout <<"\nNao foi encontrado";
-     }
+            cout << "\n\t\t   ELEMENTO NAO ENCONTRADO!\n" << endl;
+        }
     }
     else{
-        cout<<"Lista Vazia";
+        system("cls");
+        cout << "\n\t\t\t   LISTA VAZIA!\n" << endl;
     }
 }
 
@@ -107,8 +152,9 @@ void inserirnofinal(){
     noPtr p, aux = inicio;
     int valor;
     p = new no;
-    cout <<"Digite o elemento que você quer inserir: ";
+    cout <<"\nDigite o elemento que voce deseja inserir: ";
     cin >> valor;
+    system("cls");
     p->info = valor;
     p->prox = NULL;
     p->ant = NULL;
@@ -122,6 +168,28 @@ void inserirnofinal(){
            aux->prox = p;
            p->ant = aux;
     }
+    cout << "\n\t\t\tELEMENTO INSERIDO!\n" << endl;
+}
+
+void inserirnocomeco(){
+    noPtr p, aux = inicio;
+    int valor;
+    p = new no;
+    cout <<"\nDigite o elemento que voce deseja inserir: ";
+    cin >> valor;
+    system("cls");
+    p->info = valor;
+    p->prox = NULL;
+    p->ant = NULL;
+    if(listaVazia()){
+        inicio = p;
+    }
+    else{
+        inicio = p;
+        inicio->prox = aux;
+        aux->ant = inicio;
+    }
+    cout << "\n\t\t\tELEMENTO INSERIDO!\n" << endl;
 }
 
 
@@ -133,22 +201,24 @@ void retirar(){
     bool achei = false;
 
     if(listaVazia()){
-        cout<<"\n Lista Vazia";
+        system("cls");
+        cout << "\n\t\t\t   LISTA VAZIA!\n" << endl;
     }
     else {
         cout <<"\n Digite o valor a ser retirado: ";
         cin>>valor;
+        system("cls");
         if(p->info == valor){
             if(p->prox != NULL){
-            inicio = inicio->prox;
-            inicio->ant = NULL;
-            delete p;
-            achei = true;
+                inicio = inicio->prox;
+                inicio->ant = NULL;
+                delete p;
+                achei = true;
             }
             else{
-            inicio = NULL;
-            delete p;
-            achei = true;
+                inicio = NULL;
+                delete p;
+                achei = true;
             }
         }
         else{
@@ -169,8 +239,11 @@ void retirar(){
                     }
                     p = p->prox;
             }
-            if(!achei)
-                cout<<"Não encontrado";
+            if(!achei){
+                cout << "\n\t\t   ELEMENTO NAO ENCONTRADO!\n" << endl;
+            }else{
+                cout << "\n\t\t\tELEMENTO RETIRADO!\n" << endl;
+            }
         }
     }
 }
@@ -179,21 +252,40 @@ void retirar(){
 void retirarnofinal(){
     noPtr p = inicio;
     if(listaVazia()){
-        cout<<"\n Lista Vazia";
+        system("cls");
+        cout << "\n\t\t\t   LISTA VAZIA!\n" << endl;
     }
     else{
-            while(p->prox != NULL){
-                p = p->prox;
-            }
-            if(inicio->prox == NULL){
-                inicio = NULL;
-                delete p;
-            }
-            else{
+        system("cls");
+        while(p->prox != NULL){
+            p = p->prox;
+        }
+        if(inicio->prox == NULL){
+            inicio = NULL;
+            delete p;
+        }
+        else{
             p->ant->prox = NULL;
             p->ant = NULL;
             delete p;
-            }
+        }
+        cout << "\n\t\t\tELEMENTO RETIRADO!\n" << endl;
+    }
+}
+
+void retirarnocomeco(){
+    noPtr p = inicio, aux;
+    if(listaVazia()){
+        system("cls");
+        cout << "\n\t\t\t   LISTA VAZIA!\n" << endl;
+    }
+    else{
+        system("cls");
+        aux = inicio->prox;
+        delete p;
+        inicio = aux;
+        aux->ant = NULL;
+        cout << "\n\t\t\tELEMENTO RETIRADO!\n" << endl;
     }
 }
 
@@ -204,12 +296,12 @@ void inserirdecres(){
     p = new no;
     cout<<"\nInsira o valor a ser inserido decrescentemente: ";
     cin>>x;
+    system("cls");
     p->info = x;
     p->ant = NULL;
     p->prox = NULL;
     if(inicio == NULL){
         inicio = p;
-
     }
     else{
         anterior = NULL;
@@ -236,4 +328,6 @@ void inserirdecres(){
             }
         }
     }
+    cout << "\n\t\t\tELEMENTO INSERIDO!\n" << endl;
 }
+
